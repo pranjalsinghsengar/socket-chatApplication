@@ -28,7 +28,7 @@ const Login = () => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://localhost:8000",
+      url: "http://localhost:8000/users/login",
       headers: {
         "Content-Type": "application/json",
       },
@@ -41,6 +41,7 @@ const Login = () => {
         console.log(JSON.stringify(response.data));
         if(response.data.success === true){
           toast.success("Login Successfull")
+          localStorage.setItem('user', JSON.stringify(response.data.user));
           setTimeout(() => {
             
             navigate("/home")

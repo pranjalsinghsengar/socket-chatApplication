@@ -31,7 +31,7 @@ const Signup = () => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://localhost:8000/signup",
+      url: "http://localhost:8000/users/signup",
       headers: {
         "Content-Type": "application/json",
       },
