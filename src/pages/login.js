@@ -1,12 +1,11 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -20,11 +19,11 @@ const Login = () => {
     });
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
-   
-    let data = JSON.stringify(formData);
 
+    let data = JSON.stringify(formData);
     let config = {
       method: "post",
       maxBodyLength: Infinity,
@@ -43,68 +42,68 @@ const Login = () => {
           toast.success("Login Successfull")
           localStorage.setItem('user', JSON.stringify(response.data.user));
           setTimeout(() => {
-            
-            navigate("/home")
+            navigate("/home");
           }, 2000);
           setFormData({
             email: "",
             password: "",
-          })
+          });
         }
       })
       .catch((error) => {
         console.log(error);
-        toast.error(error.response.data.message)
+        toast.error(error.response.data.message);
       });
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-4 bg-white rounded shadow-lg">
-        <h2 className="text-2xl font-bold text-center">Login</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className='flex justify-center items-center min-h-screen bg-gray-100'>
+      <div className='w-full max-w-md flex items-center flex-col p-8 space-y-4 bg-white rounded shadow-lg'>
+        <h2 className='text-2xl font-bold text-center'>Login</h2>
+        <form onSubmit={handleSubmit} className='space-y-4 w-full'>
           <div>
-            <label className="block mb-1 text-gray-600" htmlFor="email">
+            <label className='block mb-1 text-gray-600' htmlFor='email'>
               Email
             </label>
             <input
               // type="email"
-              id="email"
-              name="email"
+              id='email'
+              name='email'
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className='w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500'
               required
             />
           </div>
           <div>
-            <label className="block mb-1 text-gray-600" htmlFor="password">
+            <label className='block mb-1 text-gray-600' htmlFor='password'>
               Password
             </label>
             <input
-              type="password"
-              id="password"
-              name="password"
+              type='password'
+              id='password'
+              name='password'
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className='w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500'
               required
             />
           </div>
           <button
-            type="submit"
-            className="w-full px-3 py-2 text-white bg-indigo-500 rounded hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
+            type='submit'
+            className='w-full px-3 py-2 text-white bg-indigo-500 rounded hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600'
           >
             Login
           </button>
-
-          <button onClick={()=> navigate('/signup')}>
-            sign up
-          </button>
         </form>
+        <button
+          onClick={() => navigate("/signup")}
+          className='text-violet-500 px-10 py-2 rounded-md '
+        >
+          Don't have account ?
+        </button>
       </div>
       <ToastContainer />
-
     </div>
   );
 };

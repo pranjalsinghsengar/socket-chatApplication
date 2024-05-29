@@ -61,9 +61,9 @@ const Signup = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-4 bg-white rounded shadow-lg">
+      <div className="w-full max-w-md flex flex-col items-center p-8 space-y-4 bg-white rounded shadow-lg">
         <h2 className="text-2xl font-bold text-center">Sign Up</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 w-full">
           <div>
             <label className="block mb-1 text-gray-600" htmlFor="username">
               Username
@@ -113,6 +113,9 @@ const Signup = () => {
             Sign Up
           </button>
         </form>
+        <button onClick={()=> navigate('/')}  className="text-violet-500  ">
+           have you an account ?
+          </button>
       </div>
       <ToastContainer />
     </div>
