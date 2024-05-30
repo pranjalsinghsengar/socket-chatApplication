@@ -1,37 +1,45 @@
-import React, { useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import Layout from "./layout";
 import { AppContext } from "../context/appContext";
 import { useNavigate } from "react-router-dom";
 import { bgGradient, darkBlack, shadeBlack } from "../styles/globalStyle";
+import BottomChatMenu from "../components/bottomChatMenu";
 
 const RoomLayout = ({ children }) => {
-  const { roomDetails, users } = useContext(AppContext);
+  const { roomUsers, roomDetails,users } = useContext(AppContext);
   const navigation = useNavigate();
   useEffect(() => {
-    if (!roomDetails) {
-      navigation("/home");
+    if (!roomDetails ) {
+      navigation("/");
     }
+    
   }, [roomDetails, navigation]);
+
+
+
 
   return (
     <Layout>
       <div
-        className={`${darkBlack} flex justify-between px-20 py-3 items-center`}
+        className={` backdrop-blur-lg bg-transparent flex justify-between px-4 md:px-20 py-3 pb-5 items-center relative z-20`}
       >
-        <h1 className='text-6xl font-bold text-white '>
+        <h1 className='text-xl md:text-3xl lg:text-6xl font-bold text-white '>
           {roomDetails?.roomName}
         </h1>
-        <div className={`${shadeBlack} px-5 rounded-lg max-w-96 py-3 max-h-20 overflow-auto`}>
-          <div className='flex gap-2 flex-wrap justify-center'>
-            {users.length > 0
-              ? roomDetails?.participants?.map((item, index) => {
+
+
+
+        <div className={`${shadeBlack} md:px-5 px-0 rounded-lg  w-9/12 md:max-w-96 py-1 md:py-3 max-h-20 overflow-auto`}>
+          <div className='flex gap-1 md:gap-2 flex-wrap justify-center'>
+            {roomUsers && roomUsers.length > 0
+              ? roomUsers.map((item, index) => {
                   return (
                     <button
                       key={index}
-                      className={`px-4 py-0.5 rounded-full text-sm ${bgGradient} `}
+                      className={`px-4 py-0.5 rounded-full text-xs md:text-sm ${bgGradient} `}
                       // onClick={() => startConversation(item)}
                     >
-                      {item}
+                      {item.name}
                     </button>
                   );
                 })
@@ -39,7 +47,13 @@ const RoomLayout = ({ children }) => {
           </div>
         </div>
       </div>
+      
+      
+      
       {children}
+
+      <BottomChatMenu/>
+      
     </Layout>
   );
 };

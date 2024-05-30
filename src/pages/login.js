@@ -41,9 +41,10 @@ const Login = () => {
         if(response.data.success === true){
           toast.success("Login Successfull")
           localStorage.setItem('user', JSON.stringify(response.data.user));
+          navigate("/");
           setTimeout(() => {
-            navigate("/home");
-          }, 2000);
+            window.location.reload();
+          }, 700);
           setFormData({
             email: "",
             password: "",

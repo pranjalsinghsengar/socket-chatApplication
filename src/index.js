@@ -5,13 +5,16 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import ChatContext from "./context/appContext";
+import ConfrenceContext from "./context/confrenceContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
   <BrowserRouter>
     <ChatContext>
-      <App />
+      <ConfrenceContext>
+        <App />
+      </ConfrenceContext>
     </ChatContext>
   </BrowserRouter>
   // {/* </React.StrictMode> */}

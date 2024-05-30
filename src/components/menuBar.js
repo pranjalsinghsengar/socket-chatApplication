@@ -17,7 +17,7 @@ const MenuBar = ({ setOpenMenuItem, OpenMenuItem }) => {
       icon: <MdHistory />,
     },
     {
-      name: "meeting",
+      name: "Confrence",
 
       icon: <IoVideocam />,
     },
@@ -28,9 +28,9 @@ const MenuBar = ({ setOpenMenuItem, OpenMenuItem }) => {
       title: "create room",
     },
     {
-      name: "joinRoom",
+      name: "rooms",
       // icon: <RiAddFill />,
-      title: "join room",
+      title: "rooms",
     },
   ];
 
@@ -39,11 +39,11 @@ const MenuBar = ({ setOpenMenuItem, OpenMenuItem }) => {
   };
 
   return (
-    <div className='border-b border-violet-500 w-1/2  px-2 py-1 flex justify-center gap-3 mb-2'>
+    <div className='border-b border-violet-500 w-11/12 md:w-9/12 lg:w-1/2  px-2 py-1 flex justify-center gap-1.5 md:gap-3 mb-2 '>
       {buttons.map((item, index) => (
         <button
           key={index}
-          className={`text-violet-700 border p-1 px-2 border-violet-500 rounded-lg hover:text-white hover:bg-violet-500 text-2xl flex gap-2items-center
+          className={`text-violet-700 border p-1 px-2 ${darkBlack} border-violet-500 rounded-lg hover:text-white hover:bg-violet-500 text-sm md:text-2xl  flex gap-2 items-center
             ${OpenMenuItem === item?.name ? bgGradient : ""}
           `}
           onClick={() => ButtonHandler(item)}
