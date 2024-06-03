@@ -5,9 +5,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AppContext } from "../context/appContext";
 
+const PORT = "https://socket-chat-backend-6jct.onrender.com"
+
 const Login = () => {
+
   const navigate = useNavigate();
-  const {currentUser} = useContext(AppContext)
+  const { currentUser } = useContext(AppContext);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -21,7 +24,6 @@ const Login = () => {
     });
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -29,7 +31,7 @@ const Login = () => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://localhost:8000/users/login",
+      url: `${PORT}/users/login`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -40,9 +42,9 @@ const Login = () => {
       .request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
-        if(response.data.success === true){
-          toast.success("Login Successfull")
-          localStorage.setItem('user', JSON.stringify(response.data.user));
+        if (response.data.success === true) {
+          toast.success("Login Successfull");
+          localStorage.setItem("user", JSON.stringify(response.data.user));
           navigate("/");
           setTimeout(() => {
             window.location.reload();

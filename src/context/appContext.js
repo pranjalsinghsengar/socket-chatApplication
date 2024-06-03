@@ -13,13 +13,12 @@ import { io } from "socket.io-client";
 
 export const AppContext = createContext();
 
+const PORT = "https://socket-chat-backend-6jct.onrender.com";
+
 const ChatContext = ({ children }) => {
   const navigate = useNavigate();
   const chatlogEndRef = useRef(null);
-  const socket = useMemo(
-    () => io("http://localhost:8000", { autoConnect: true }),
-    []
-  );
+  const socket = useMemo(() => io(PORT, { autoConnect: true }), []);
   const [OpenMenuItem, setOpenMenuItem] = useState("");
 
   const [currentUser, setCurrentUser] = useState(null);
@@ -43,8 +42,8 @@ const ChatContext = ({ children }) => {
     scrollToBottom();
   }, [chatlog]);
 
-  const {roomID} = useParams()
-  
+  const { roomID } = useParams();
+
   useEffect(() => {
     if (!currentUser) {
       const UserDetails = JSON.parse(localStorage.getItem("user"));
@@ -97,7 +96,7 @@ const ChatContext = ({ children }) => {
         toast.success("Room Created");
       }
     });
-    socket.on("join room", (roomDetails,roomMessages) => {
+    socket.on("join room", (roomDetails, roomMessages) => {
       console.log("Room Joined", roomDetails);
       if (roomDetails._id) {
         socket.emit("room users", { user_ID: roomDetails?.participants });
@@ -121,33 +120,24 @@ const ChatContext = ({ children }) => {
     });
 
     socket.on("all joined rooms", (joinedRooms) => {
-      setJoinedRooms( joinedRooms);
+      setJoinedRooms(joinedRooms);
     });
 
     socket.on("create:confrence", (user) => {
-      
       // console.log("create meeting", user)
-      if(user){
-
-        setConfrenceid(user.id)
+      if (user) {
+        setConfrenceid(user.id);
       }
       // console.log("create meeting", user.id)
-    
     });
     socket.on("joined meeting", (user) => {
       // setJoinedRooms( joinedRooms);
-      setJoinedInConfrence(user)
-      console.log("joined meeting", user)
-    
+      setJoinedInConfrence(user);
+      console.log("joined meeting", user);
     });
     socket.on("incomming:call", (callData) => {
-   
-      console.log("incomming:call", callData)
-    
+      console.log("incomming:call", callData);
     });
-
-
-
 
     return () => {
       socket.off("connection");
@@ -180,7 +170,9 @@ const ChatContext = ({ children }) => {
         roomDetails,
         roomUsers,
         roomConversations,
-        joinedRooms,confrenceid,joinedInConfrence
+        joinedRooms,
+        confrenceid,
+        joinedInConfrence,
       }}
     >
       {children}
