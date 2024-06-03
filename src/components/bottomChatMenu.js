@@ -9,7 +9,7 @@ import { darkBlack, shadeBlack } from "../styles/globalStyle";
 import { useNavigate } from "react-router-dom";
 import Videobuttons from "./videobuttons";
 
-const BottomChatMenu = ({ message, setMessage }) => {
+const BottomChatMenu = ({ message, setMessage ,sendMessage }) => {
   const {
     socket,
     currentUser,
@@ -46,6 +46,7 @@ const BottomChatMenu = ({ message, setMessage }) => {
         roomName: roomName,
         user_ID: currentUser._id,
       });
+      socket.emit("all joined rooms", { user_ID: currentUser?._id });
       setRoomName("");
       setOpenMenuItem("");
     } else {
@@ -76,21 +77,7 @@ const BottomChatMenu = ({ message, setMessage }) => {
     }
   };
 
-  const sendMessage = (e) => {
-    e.preventDefault();
-
-    if (currentConversation) {
-      const data = {
-        conversationId: currentConversation._id,
-        senderId: currentUser._id,
-        message,
-      };
-      socket.emit("chat message", data);
-      setMessage("");
-    } else {
-      toast("Please select a user from users list to chat with");
-    }
-  };
+ 
 
   return (
     <div

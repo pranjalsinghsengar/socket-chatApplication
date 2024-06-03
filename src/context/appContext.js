@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -32,6 +32,8 @@ const ChatContext = ({ children }) => {
   const [roomUsers, setRoomUsers] = useState(null);
   const [roomConversations, setRoomConversations] = useState(null);
   const [joinedRooms, setJoinedRooms] = useState(null);
+  const [confrenceid, setConfrenceid] = useState(null);
+  const [joinedInConfrence, setJoinedInConfrence] = useState([]);
 
   const scrollToBottom = () => {
     chatlogEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -41,6 +43,8 @@ const ChatContext = ({ children }) => {
     scrollToBottom();
   }, [chatlog]);
 
+  const {roomID} = useParams()
+  
   useEffect(() => {
     if (!currentUser) {
       const UserDetails = JSON.parse(localStorage.getItem("user"));
@@ -84,20 +88,22 @@ const ChatContext = ({ children }) => {
 
     socket.on("create room", (roomDetails) => {
       console.log("Room created", roomDetails);
-      toast.success("Room Created");
       if (roomDetails._id) {
-        navigate("/room");
-        //   localStorage.setItem("room", JSON.stringify());
+        socket.emit("join room", {
+          roomName: roomDetails?.roomName,
+          user_ID: currentUser?._id,
+        });
+        navigate(`/${roomDetails._id}`);
+        toast.success("Room Created");
       }
     });
-    socket.on("join room", (roomDetails) => {
+    socket.on("join room", (roomDetails,roomMessages) => {
       console.log("Room Joined", roomDetails);
       if (roomDetails._id) {
         socket.emit("room users", { user_ID: roomDetails?.participants });
-
-        navigate("/room");
+        navigate(`/${roomDetails._id}`);
         setRoomDetails(roomDetails);
-        setRoomConversations(roomDetails?.messages);
+        setRoomConversations(roomMessages);
       }
       toast.success("joined room");
     });
@@ -108,15 +114,40 @@ const ChatContext = ({ children }) => {
       }
     });
     socket.on("room chat", (roomMessage) => {
-      if (roomMessage?.messages.length > 0) {
-        setRoomConversations(roomMessage?.messages);
+      if (roomMessage.length > 0) {
+        setRoomConversations(roomMessage);
       }
       console.warn("roomMessage", roomMessage);
     });
 
     socket.on("all joined rooms", (joinedRooms) => {
-      setJoinedRooms(joinedRooms);
+      setJoinedRooms( joinedRooms);
     });
+
+    socket.on("create:confrence", (user) => {
+      
+      // console.log("create meeting", user)
+      if(user){
+
+        setConfrenceid(user.id)
+      }
+      // console.log("create meeting", user.id)
+    
+    });
+    socket.on("joined meeting", (user) => {
+      // setJoinedRooms( joinedRooms);
+      setJoinedInConfrence(user)
+      console.log("joined meeting", user)
+    
+    });
+    socket.on("incomming:call", (callData) => {
+   
+      console.log("incomming:call", callData)
+    
+    });
+
+
+
 
     return () => {
       socket.off("connection");
@@ -127,6 +158,8 @@ const ChatContext = ({ children }) => {
       socket.off("userlist");
       socket.off("create room");
       socket.off("join room");
+      socket.off("create:confrence");
+      socket.off("joined meeting");
     };
   }, [currentUser]);
 
@@ -147,7 +180,7 @@ const ChatContext = ({ children }) => {
         roomDetails,
         roomUsers,
         roomConversations,
-        joinedRooms,
+        joinedRooms,confrenceid,joinedInConfrence
       }}
     >
       {children}

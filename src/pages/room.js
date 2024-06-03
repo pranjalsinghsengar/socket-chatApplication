@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ChatInput from "../components/chatInput";
 
 import RoomLayout from "../layout/roomLayout";
@@ -10,15 +10,6 @@ const Room = () => {
     useContext(AppContext);
   const [message, setMessage] = useState(null);
 
-  const MessageSubmithandler = (e) => {
-    e.preventDefault();
-    socket.emit("room chat", {
-      roomId: roomDetails._id,
-      senderId: currentUser._id,
-      message: message,
-    });
-    setMessage("")
-  };
   return (
     <RoomLayout>
       <div className="relative h-full pb-10">
@@ -32,48 +23,48 @@ const Room = () => {
           className="overflow-scroll w-full flex justify-center h-full -mt-4 pt-4  "
           //   onClick={() => setOpenMenuItem("")}
         >
-          <div className={`w-9/12 flex flex-col gap-4 h-full   `} >
+          <div className={`w-9/12 flex flex-col gap-5 h-full   `}>
             {roomConversations &&
               roomConversations.length > 0 &&
               roomConversations?.map((item, index) => {
-                // console.log(
-                //   "item.senderId === currentUser.senderId",
-                //   item.senderId,
-                //   currentUser._id
-                // );
+             
                 return (
                   <div
                     key={index}
-                    className={` flex  ${
+                    className={` flex relative ${
                       item.senderId === currentUser._id
                         ? "justify-end"
                         : "justify-start"
                     }`}
                   >
+                    
+                    <span className={`text-xs  rounded text-slate-200 absolute z-10 -top-[35%]  ${item.senderId === currentUser._id ? "right-0 hidden" : " left-2"}  `}>{item.name}</span>
                     <div
-                      className={` px-5 py-2 rounded-xl max-w-[60%] whitespace-pre-wrap overflow-auto text-white  ${
+                      className={` px-5 py-2 rounded-xl max-w-[60%] whitespace-pre-wrap overflow-auto text-white relative  ${
                         item.senderId === currentUser._id
                           ? "bg-gray-700 "
                           : `${bgGradient}`
                       } `}
                     >
-                      {item.message}
+                     
+                        {item.message}
+                     
                     </div>
                   </div>
                 );
-            })}
-            <div ref={chatlogEndRef} className="py-24 "></div>
+              })}
+            <div ref={chatlogEndRef} className="py-32 "></div>
           </div>
         </div>
 
-        <div className=" fixed bottom-0 left-[50%] z-10 transform translate-x-[-50%] py-10 pt-4 backdrop-blur-lg w-full flex flex-col items-center ">
+        {/* <div className=" fixed bottom-0 left-[50%] z-10 transform translate-x-[-50%] py-10 pt-4 backdrop-blur-lg w-full flex flex-col items-center ">
           <ChatInput
             onSubmit={MessageSubmithandler}
             inputValue={message}
             onChange={(e) => setMessage(e.target.value)}
             onClick={null}
           />
-        </div>
+        </div> */}
       </div>
     </RoomLayout>
   );

@@ -4,9 +4,11 @@ import { MdHistory } from "react-icons/md";
 import { RiAddFill } from "react-icons/ri";
 import { toast } from "react-toastify";
 import { bgGradient, darkBlack } from "../styles/globalStyle";
+import { useNavigate } from "react-router-dom";
 
 const MenuBar = ({ setOpenMenuItem, OpenMenuItem }) => {
   const buttons = [
+    
     {
       name: "userList",
       title: "Users List",
@@ -32,9 +34,17 @@ const MenuBar = ({ setOpenMenuItem, OpenMenuItem }) => {
       // icon: <RiAddFill />,
       title: "rooms",
     },
+    {
+      name: "logout",
+      title: "mere ko bhar jana hai",
+    },
   ];
 
   const ButtonHandler = (item) => {
+    if(item.name === "logout"){
+      window.location.reload();
+      localStorage.removeItem("user");
+    }
     setOpenMenuItem(item.name);
   };
 

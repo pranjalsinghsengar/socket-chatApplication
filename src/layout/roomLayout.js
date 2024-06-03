@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import Layout from "./layout";
 import { AppContext } from "../context/appContext";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import { bgGradient, darkBlack, shadeBlack } from "../styles/globalStyle";
 import BottomChatMenu from "../components/bottomChatMenu";
 
 const RoomLayout = ({ children }) => {
-  const { roomUsers, roomDetails,users } = useContext(AppContext);
+  const {socket, roomUsers, roomDetails,currentUser } = useContext(AppContext);
   const navigation = useNavigate();
   useEffect(() => {
     if (!roomDetails ) {
@@ -16,6 +16,17 @@ const RoomLayout = ({ children }) => {
   }, [roomDetails, navigation]);
 
 
+  const [message, setMessage] = useState("");
+
+  const sendMessage = (e) => {
+    e.preventDefault();
+    socket.emit("room chat", {
+      roomId: roomDetails._id,
+      senderId: currentUser._id,
+      message: message,
+    });
+    setMessage("")
+  };
 
 
   return (
@@ -52,7 +63,7 @@ const RoomLayout = ({ children }) => {
       
       {children}
 
-      <BottomChatMenu/>
+      <BottomChatMenu message={message} setMessage={setMessage } sendMessage={sendMessage} />
       
     </Layout>
   );

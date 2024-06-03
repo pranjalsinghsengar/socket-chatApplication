@@ -34,6 +34,23 @@ function Dashboard() {
  
   console.log("users", users);
   console.log("chatlog", chatlog);
+
+  const sendMessage = (e) => {
+    e.preventDefault();
+
+    if (currentConversation) {
+      const data = {
+        conversationId: currentConversation._id,
+        senderId: currentUser._id,
+        message,
+      };
+      socket.emit("chat message", data);
+      setMessage("");
+    } else {
+      toast("Please select a user from users list to chat with");
+    }
+  };
+
   return (
     <Layout>
       <div className="flex flex-col justify-start items-center h-full pb-10 ">
@@ -62,7 +79,7 @@ function Dashboard() {
           className="overflow-scroll w-full flex justify-center h-full mb-20  -mt-8 pt-10"
           onClick={() => setOpenMenuItem("")}
         >
-          <div className={`w-9/12 flex flex-col gap-4 h-full text-xs md:text-sm lg:text-base   `}>
+          <div className={`w-9/12 flex flex-col gap-1 h-full text-xs md:text-sm lg:text-base   `}>
             {chatlog.length > 0 &&
               chatlog?.map((item, index) => {
                 
@@ -92,72 +109,8 @@ function Dashboard() {
         </div>
 
 
-        <BottomChatMenu message={message} setMessage={setMessage} />
+        <BottomChatMenu message={message} setMessage={setMessage} sendMessage={sendMessage} />
 
-        {/* <div className=" fixed bottom-0 left-[50%] z-10 transform translate-x-[-50%] py-10 pt-4 backdrop-blur-lg w-full flex flex-col items-center ">
-          <div className="gap-3 flex text-center">
-           
-
-            {OpenMenuItem === "createRoom" && (
-              <RoomInput
-                title="Create New Room"
-                placeholder="Create Room name "
-                value={roomName}
-                subtitle={"Create new room then press [enter]"}
-                onSubmit={CreateRoomHandler}
-                setOpenMenuItem={setOpenMenuItem}
-                onChange={(e) => setRoomName(e.target.value)}
-              />
-            )}
-            {OpenMenuItem === "rooms" && (
-              <div className="flex items-center">
-                <div className="flex flex-wrap gap-1 max-w-96">
-                  {joinedRooms &&
-                    joinedRooms.map((item, index) => {
-                      console.log("==>", item);
-                      return (
-                        <div
-                          key={index}
-                          className={`cursor-pointer ${shadeBlack} hover:bg-zinc-950 py-2 px-4 rounded-md hover:border hover:border-slate-50/20`}
-                          onClick={() => RoomHander(item.roomName)}
-                        >
-                          {item.roomName}
-                        </div>
-                      );
-                    })}
-                </div>
-                <RoomInput
-                  title="Join Room"
-                  placeholder="Join Room "
-                  value={joinRoom}
-                  subtitle={"Enter the room name and press [enter]"}
-                  onSubmit={JoinRoomHandler}
-                  setOpenMenuItem={setOpenMenuItem}
-                  onChange={(e) => setJoinRoom(e.target.value)}
-                />
-              </div>
-            )}
-          </div>
-
-          {OpenMenuItem === "userList" && (
-            <FriendsList
-              setOpenMenuItem={setOpenMenuItem}
-              users={users}
-              startConversation={startConversation}
-            />
-          )}
-          <MenuBar
-            setOpenMenuItem={setOpenMenuItem}
-            OpenMenuItem={OpenMenuItem}
-          />
-
-          <ChatInput
-            onSubmit={sendMessage}
-            inputValue={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onClick={() => setOpenMenuItem("")}
-          />
-        </div> */}
       </div>
     </Layout>
   );

@@ -17,7 +17,7 @@ const AppRoutes = () => {
       ) : (
         <>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/room" element={<Room />} />
+          <Route path="/:room" element={<Room />} />
         </>
       )}
     </Routes>
